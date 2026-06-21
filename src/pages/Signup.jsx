@@ -17,6 +17,8 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Field } from "@/components/ui/field"
+import { FingerprintPattern } from "lucide-react"
+import { gooeyToast } from "@/components/ui/goey-toaster"
 
 export default function Signup() {
     const navigate = useNavigate()
@@ -35,8 +37,14 @@ export default function Signup() {
         setError("")
         try {
             const res = await register(form)
-            localStorage.setItem("token", res.data.token)
-            navigate("/home")
+            const token = res.data.token || res.data.data?.token
+            localStorage.setItem("token", token)
+            gooeyToast.success('Signup', {
+                description: 'Account created successfully.',
+                preset: 'smooth',
+                showProgress: true,
+            })
+            navigate("/")
         } catch (err) {
             setError(err.response?.data?.message || "Registration failed")
         } finally {
@@ -45,12 +53,15 @@ export default function Signup() {
     }
 
     return (
-        <div className="w-screen h-screen bg-linear-to-r from-slate-800 to-slate-700">
+        <div className="w-screen h-screen bg-linear-to-r from-slate-900 to-zinc-800">
             <div className="flex justify-center items-center h-screen">
                 <Card className="w-full max-w-sm mx-4">
-                    <CardHeader>
-                        <CardTitle className="text-2xl font-bold">Create an account</CardTitle>
-                        <CardDescription className="text-sm">Already have an account? <Link to="/" className="underline hover:text-black font-medium">Log in</Link></CardDescription>
+                    <CardHeader className="flex flex-row gap-3">
+                        <FingerprintPattern className="w-12 h-12 border-2 rounded-md p-1.5 border-black hover:text-gray-500 hover:border-gray-500" />
+                        <div className="flex flex-col">
+                            <CardTitle className="text-2xl font-bold">Create an account</CardTitle>
+                            <CardDescription className="text-sm">Already have an account? <Link to="/" className="underline hover:text-black font-medium">Log in</Link></CardDescription>
+                        </div>
                     </CardHeader>
                     <CardContent>
                         <form onSubmit={handleSubmit}>
@@ -104,7 +115,18 @@ export default function Signup() {
                         </form>
                     </CardContent>
                     <CardFooter className="flex-col gap-2">
-                        <Button variant="outline" className="w-full">
+                        <div className="space-y-4">
+                            <div className="flex justify-center text-xs uppercase">
+                                <span className="bg-background px-2 text-muted-foreground">
+                                    Or
+                                </span>
+                            </div>
+                        </div>
+                        <Button
+                            variant="outline"
+                            className="w-full"
+                            onClick={() => window.location.href = `${import.meta.env.VITE_API_URL}/auth/google`}
+                        >
                             Login with Google <img src={googleIcon} alt="Google" className="w-4 h-4" />
                         </Button>
                         <Button variant="outline" className="w-full">
