@@ -124,7 +124,13 @@ export default function Login() {
             >
               Login with Google <img src={googleIcon} alt="Google" className="w-4 h-4" />
             </Button>
-            <Button variant="outline" className="w-full">
+            <Button
+              variant="outline"
+              className="w-full"
+              onClick={() =>
+                window.location.href = `${import.meta.env.VITE_API_URL}/auth/github`
+              }
+            >
               Login with Github <img src={githubIcon} alt="Github" className="w-4 h-4" />
             </Button>
           </CardFooter>
