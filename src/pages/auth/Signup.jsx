@@ -101,7 +101,7 @@ export default function Signup() {
                                         required
                                     />
                                     <div className="text-muted-foreground text-sm">
-                                        Must be at least 8 characters.
+                                        Must be at least 6 characters.
                                     </div>
                                 </div>
                                 <Field orientation="horizontal">
